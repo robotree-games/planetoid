@@ -92,8 +92,10 @@ class playGame extends Phaser.Scene{
     }
     preload(){
         this.load.image("bigcircle", "planet.png");
+
+        this.load.image('sky', 'space.jpg');
         // this.load.spritesheet("robot", "robot.png", { frameWidth: 128, frameHeight: 128 })
-        this.load.spritesheet("player", "robot.png", { frameWidth: 64, frameHeight: 32 });
+        this.load.spritesheet("player", "player.png", { frameWidth: 60, frameHeight: 32 });
         this.load.image("spike", "spike.png");
         this.load.image("mask", "mask.png");
         this.load.image("particle", "particle.png");
@@ -101,6 +103,11 @@ class playGame extends Phaser.Scene{
     create(){
 
         // uhh... why isn't this working!?
+        let image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'sky')
+        let scaleX = this.cameras.main.width / image.width
+        let scaleY = this.cameras.main.height / image.height
+        let scale = Math.max(scaleX, scaleY)
+        image.setScale(scale).setScrollFactor(0)
 
         this.hiScore = localStorage.getItem('topScore');
         console.log(this.hiScore)
@@ -128,15 +135,12 @@ class playGame extends Phaser.Scene{
             key: 'walk',
             frames: [
                 { key: 'player',frame:1 },
-                { key: 'player',frame:3 },
                 { key: 'player',frame:2 },
-                // { key: 'player',frame:1 },
-                // { key: 'player',frame:3 },
-                // { key: 'player',frame:2 },
-                // { key: 'player',frame:1 },
-                // { key: 'player',frame:3 },
+                { key: 'player',frame:3 },
+                { key: 'player',frame:4 },
+                { key: 'player',frame:3 }
             ],
-            frameRate: 16,
+            frameRate: 6,
             repeat: -1
         });
         this.player.play('walk');
@@ -188,7 +192,7 @@ class playGame extends Phaser.Scene{
         }
 
         // adding the mask image which will act like a "fog" to hide and show spikes
-        this.maskImage = this.add.sprite(game.config.width / 2, game.config.height / 2, "mask");
+       // this.maskImage = this.add.sprite(game.config.width / 2, game.config.height / 2, "mask");
 
         // creating a particle system uising "particle" image
         var particles = this.add.particles("particle");
@@ -287,7 +291,7 @@ class playGame extends Phaser.Scene{
             this.player.currentAngle = Phaser.Math.Angle.WrapDegrees(this.player.currentAngle + gameOptions.playerSpeed);
 
             // moving the mask image accordingly
-            this.maskImage.angle = this.player.currentAngle + 90;
+          //  this.maskImage.angle = this.player.currentAngle + 90;
 
             // getting the same angle in radians
             var radians = Phaser.Math.DegToRad(this.player.currentAngle);
